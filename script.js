@@ -74,25 +74,30 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Calculate SIP (Recurring Deposit / Cumulative Simple Interest Style)
-        // This method calculates simple interest on each monthly installment.
-        // It is commonly used for RDs and gives a result of ~65 for 1200 annual investment (100/mo) at 10%.
+        // Calculate SIP (Compound Interest)
+        // Formula: FV = P * [ ((1 + i)^n - 1) / i ] * (1 + i)
+        // P = Monthly Investment
+        // i = Monthly Interest Rate (Annual Rate / 12 / 100)
+        // n = Total Months
 
         const totalMonths = years * 12;
-        const monthlyRate = annualRate / 12 / 100; // Monthly Rate as a decimal
+        const monthlyRate = annualRate / 12 / 100;
 
-        // Formula for Sum of Simple Interests: P * [N * (N+1) / 2] * r
-        // Where P = Monthly Investment
-        // N = Total Months
-        // r = Monthly Interest Rate
-
-        const nSum = (totalMonths * (totalMonths + 1)) / 2;
-        const totalInterest = monthlyInvestment * nSum * monthlyRate;
-
+        let totalValue = 0;
         const totalInvested = monthlyInvestment * totalMonths;
-        const totalValue = totalInvested + totalInterest;
 
-        const estimatedReturns = totalInterest;
+        if (annualRate === 0) {
+            totalValue = totalInvested;
+        } else {
+            // Future Value of Annuity Due (Investment at the beginning of each period)
+            const n = totalMonths;
+            const i = monthlyRate;
+            const P = monthlyInvestment;
+
+            totalValue = P * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+        }
+
+        const estimatedReturns = totalValue - totalInvested;
 
         // Display Results
         document.getElementById('sip-invested-amount').textContent = formatCurrency(totalInvested);
