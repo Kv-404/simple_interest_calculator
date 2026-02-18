@@ -6,14 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            // Remove 'active' class from all
+
             tabs.forEach(t => t.classList.remove('active'));
             sections.forEach(s => s.classList.remove('active'));
-
-            // Add 'active' class to current
             tab.classList.add('active');
 
-            // Show corresponding section
             const targetId = tab.dataset.target;
             if (targetId === 'simple-interest') {
                 document.getElementById('simple-interest-form').classList.add('active');
@@ -30,12 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
     siForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        // Get Inputs
         const principal = parseFloat(document.getElementById('si-principal').value);
         const rate = parseFloat(document.getElementById('si-rate').value);
         const time = parseFloat(document.getElementById('si-time').value);
 
-        // Validate
         if (isInvalid(principal) || isInvalid(rate) || isInvalid(time)) {
             alert('Please enter valid positive numbers.');
             return;
@@ -46,13 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const interest = (principal * rate * time) / 100;
         const total = principal + interest;
 
-        // Display Results
-        // Note: We added 'si-principal-amount' back to the HTML
         document.getElementById('si-principal-amount').textContent = formatCurrency(principal);
         document.getElementById('si-interest-amount').textContent = formatCurrency(interest);
         document.getElementById('si-total-amount').textContent = formatCurrency(total);
 
-        // Show result box
         document.getElementById('si-result').classList.remove('hidden');
     });
 
@@ -61,8 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sipForm = document.getElementById('sip-calc-form');
 
     sipForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
+        e.preventDefault(); 
         // Get Inputs
         const monthlyInvestment = parseFloat(document.getElementById('sip-monthly').value);
         const annualRate = parseFloat(document.getElementById('sip-rate').value);
@@ -89,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (annualRate === 0) {
             totalValue = totalInvested;
         } else {
-            // Future Value of Annuity Due (Investment at the beginning of each period)
+
             const n = totalMonths;
             const i = monthlyRate;
             const P = monthlyInvestment;
@@ -99,12 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const estimatedReturns = totalValue - totalInvested;
 
-        // Display Results
         document.getElementById('sip-invested-amount').textContent = formatCurrency(totalInvested);
         document.getElementById('sip-returns-amount').textContent = formatCurrency(estimatedReturns);
         document.getElementById('sip-total-amount').textContent = formatCurrency(totalValue);
 
-        // Show result box
         document.getElementById('sip-result').classList.remove('hidden');
     });
 
